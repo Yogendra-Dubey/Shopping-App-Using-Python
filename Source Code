@@ -1,0 +1,88 @@
+# Shopping App
+
+class ShoppingApp:
+    def __init__(self):
+        self.products = {
+            "1": {"name": "Laptop", "price": 800},
+            "2": {"name": "Smartphone", "price": 500},
+            "3": {"name": "Headphones", "price": 50},
+            "4": {"name": "Smartwatch", "price": 150},
+        }
+        self.cart = {}
+
+    def display_products(self):
+        print("\nAvailable Products:")
+        for pid, info in self.products.items():
+            print(f"{pid}. {info['name']} - ${info['price']}")
+
+    def add_to_cart(self):
+        self.display_products()
+        choice = input("\nEnter the product number to add to cart: ")
+        if choice in self.products:
+            quantity = int(input("Enter quantity: "))
+            if choice in self.cart:
+                self.cart[choice]["quantity"] += quantity
+            else:
+                self.cart[choice] = {
+                    "name": self.products[choice]["name"],
+                    "price": self.products[choice]["price"],
+                    "quantity": quantity,
+                }
+            print(f"{self.products[choice]['name']} added to cart!")
+        else:
+            print("Invalid product number!")
+
+    def view_cart(self):
+        if not self.cart:
+            print("\nYour cart is empty!")
+        else:
+            print("\nYour Cart:")
+            for pid, info in self.cart.items():
+                total_price = info["price"] * info["quantity"]
+                print(f"{info['name']} - ${info['price']} x {info['quantity']} = ${total_price}")
+
+    def checkout(self):
+        if not self.cart:
+            print("\nYour cart is empty!")
+            return
+        total_amount = sum(
+            info["price"] * info["quantity"] for info in self.cart.values()
+        )
+        print("\nCheckout:")
+        self.view_cart()
+        print(f"Total Amount: ${total_amount}")
+        confirm = input("Do you want to confirm the purchase? (yes/no): ").lower()
+        if confirm == "yes":
+            print("Thank you for your purchase!")
+            self.cart.clear()
+        else:
+            print("Checkout cancelled.")
+
+    def run(self):
+        while True:
+            print("\nWelcome to the Shopping App!")
+            print("1. View Products")
+            print("2. Add to Cart")
+            print("3. View Cart")
+            print("4. Checkout")
+            print("5. Exit")
+            choice = input("Enter your choice: ")
+            if choice == "1":
+                self.display_products()
+            elif choice == "2":
+                self.add_to_cart()
+            elif choice == "3":
+                self.view_cart()
+            elif choice == "4":
+                self.checkout()
+            elif choice == "5":
+                print("Thank you for using the Shopping App. Goodbye!")
+                break
+            else:
+                print("Invalid choice. Please try again.")
+
+
+# Run the app
+if __name__ == "__main__":
+    app = ShoppingApp()
+    app.run()
